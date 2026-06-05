@@ -29,19 +29,21 @@ icon_base64 = get_image_base64("modulalogo.png")
 # Custom CSS for Galaxy Theme, Input Elements, and Fixed Header Elements
 st.markdown("""
     <style>
-    /* Ensure the main app container is transparent so we see the body background */
-    .stApp {
-        background: transparent !important;
+    /* Force transparency on all Streamlit containers */
+    .stApp, .stApp [data-testid="stAppViewContainer"], .stApp [data-testid="stMainBlockContainer"] {
+        background-color: transparent !important;
     }
     
-    /* Apply the background and star animation directly to the root body element */
-    body {
+    /* Apply the galaxy background to the root html/body 
+       using a fixed layer to ensure it stays behind everything 
+    */
+    html, body, [data-testid="stAppViewContainer"] {
         background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 50%, #020617 100%) !important;
-        position: relative;
+        background-attachment: fixed !important;
     }
     
-    body::before {
-        content: "";
+    /* Star animation layer */
+    .galaxy-bg {
         position: fixed;
         top: 0;
         left: 0;
@@ -53,6 +55,7 @@ st.markdown("""
         background-size: 550px 550px, 350px 350px;
         animation: twinkle 15s linear infinite;
         opacity: 0.3;
+        pointer-events: none;
     }
     
     @keyframes twinkle {
@@ -68,8 +71,6 @@ st.markdown("""
     /* Completely neutralize the default Streamlit glass block header */
     header[data-testid="stHeader"] {
         background-color: transparent !important;
-        z-index: 1 !important;
-        pointer-events: none;
     }
 
     /* --- GLOBAL TOP FLOATING HEADER --- */
@@ -118,7 +119,6 @@ st.markdown("""
         text-decoration: none !important;
         cursor: pointer !important;
         transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
         pointer-events: auto !important;
         display: inline-block;
     }
@@ -127,16 +127,12 @@ st.markdown("""
         color: #ffffff !important;
         background-color: rgba(147, 51, 234, 0.12) !important;
         border-color: rgba(168, 85, 247, 0.7) !important;
-        transform: translateY(-3px); 
-        box-shadow: 0 6px 16px rgba(147, 51, 234, 0.4) !important;
     }
 
     .nav-btn.active {
         color: #ffffff !important;
         background: linear-gradient(135deg, rgba(168, 85, 247, 0.35), rgba(236, 72, 153, 0.35)) !important;
         border-color: #a855f7 !important;
-        box-shadow: 0 0 12px rgba(168, 85, 247, 0.6) !important;
-        transform: translateY(0px) scale(0.97);
     }
 
     .header-space-offset {
@@ -151,6 +147,9 @@ st.markdown("""
     }
     </style>
 """, unsafe_allow_html=True)
+
+# Inject the background div
+st.markdown('<div class="galaxy-bg"></div>', unsafe_allow_html=True)
 
 # Generate logo layout
 logo_html = f'<img src="data:image/png;base64,{logo_base64}" alt="modula. logo">' if logo_base64 else '<div style="font-size:1.8rem; font-weight:800; background:linear-gradient(45deg, #a855f7, #ec4899); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">modula.</div>'
