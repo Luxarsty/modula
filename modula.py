@@ -29,16 +29,18 @@ icon_base64 = get_image_base64("modulalogo.png")
 # Custom CSS for Galaxy Theme, Input Elements, and Fixed Header Elements
 st.markdown("""
     <style>
-    /* Force the main app container to sit above the background */
+    /* Ensure the main app container is transparent so we see the body background */
     .stApp {
-        background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 50%, #020617 100%);
-        color: #ffffff;
-        position: relative;
-        z-index: 1;
+        background: transparent !important;
     }
     
-    /* Move background to the back with a negative z-index */
-    .stApp::before {
+    /* Apply the background and star animation directly to the root body element */
+    body {
+        background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 50%, #020617 100%) !important;
+        position: relative;
+    }
+    
+    body::before {
         content: "";
         position: fixed;
         top: 0;
@@ -58,11 +60,9 @@ st.markdown("""
         to { background-position: 550px 550px, 350px 350px; }
     }
     
-    /* Ensure other elements stay visible and above the background */
-    h1, h2, h3, h4, h5, h6, p, label, .stMarkdown {
+    /* Ensure all text remains visible */
+    h1, h2, h3, h4, h5, h6, p, label, .stMarkdown, .stMetric, .stRadio, .stSlider {
         color: #ffffff !important;
-        position: relative;
-        z-index: 2;
     }
 
     /* Completely neutralize the default Streamlit glass block header */
