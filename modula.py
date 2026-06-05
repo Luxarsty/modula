@@ -24,37 +24,15 @@ def get_image_base64(path):
 
 # Convert images to active inline base64 strings
 logo_base64 = get_image_base64("modula.png")
-icon_base64 = get_image_base64("modulalogo.png") 
+icon_base64 = get_image_base64("modulalogo.png") # Updated to correct filename and extension
 
 # Custom CSS for Galaxy Theme, Input Elements, and Fixed Header Elements
 st.markdown("""
     <style>
-    /* Galaxy Background with Dynamic Star Overlay */
+    /* Galaxy Background & Text Coloring */
     .stApp {
-        background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 50%, #020617 100%);
+        background-image: radial-gradient(circle at center, #111222 0%, #080810 70%, #020205 100%);
         color: #ffffff;
-        position: relative;
-    }
-    
-    /* Animated Star Field Effect */
-    .stApp::before {
-        content: "";
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
-                          radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px);
-        background-size: 550px 550px, 350px 350px;
-        animation: twinkle 15s linear infinite;
-        opacity: 0.3;
-        pointer-events: none;
-    }
-    
-    @keyframes twinkle {
-        from { background-position: 0 0, 0 0; }
-        to { background-position: 550px 550px, 350px 350px; }
     }
     
     /* Make all default text, headers, and labels bright white for visibility */
