@@ -26,20 +26,15 @@ def get_image_base64(path):
 logo_base64 = get_image_base64("modula.png")
 icon_base64 = get_image_base64("modulalogo.png")
 
+# CSS with fixed dark background and star overlay
 st.markdown("""
     <style>
-    /* 1. Ensure the app container is transparent to show the body background */
-    .stApp {
-        background: transparent !important;
+    /* Set a flat dark background to prevent "white flash" */
+    .stApp, body {
+        background-color: #020617 !important;
     }
     
-    /* 2. Base galaxy background on the body */
-    body {
-        background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 50%, #020617 100%) !important;
-        position: relative;
-    }
-    
-    /* 3. The moving star layer - specifically restricted to z-index -1 */
+    /* Keep the stars on top of the background */
     body::before {
         content: "";
         position: fixed;
@@ -47,15 +42,32 @@ st.markdown("""
         left: 0;
         width: 100%;
         height: 100%;
-        z-index: -1;
+        z-index: 0;
         background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
                           radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px);
         background-size: 550px 550px, 350px 350px;
         animation: twinkle 15s linear infinite;
         opacity: 0.3;
+        pointer-events: none;
+    }
+    
+    @keyframes twinkle {
+        from { background-position: 0 0, 0 0; }
+        to { background-position: 550px 550px, 350px 350px; }
+    }
+    
+    /* Ensure all text remains visible */
+    h1, h2, h3, h4, h5, h6, p, label, .stMarkdown, .stMetric, .stRadio, .stSlider {
+        color: #ffffff !important;
     }
 
-    /* 4. Ensure navigation UI is always on top */
+    /* Neutralize default Streamlit header */
+    header[data-testid="stHeader"] {
+        background-color: transparent !important;
+        z-index: 1 !important;
+    }
+
+    /* --- GLOBAL TOP FLOATING HEADER --- */
     .custom-top-header {
         position: fixed;
         top: 0;
@@ -63,31 +75,42 @@ st.markdown("""
         right: 0;
         height: 70px;
         padding: 5px max(6vw, 30px);
-        background: rgba(8, 8, 16, 0.85) !important;
+        background: rgba(8, 8, 16, 0.95);
         backdrop-filter: blur(16px);
         border-bottom: 1px solid rgba(147, 51, 234, 0.2);
-        z-index: 999999 !important; /* Forces the header above the galaxy */
+        z-index: 999999 !important;
         display: flex;
         justify-content: space-between;
         align-items: center;
         pointer-events: auto !important;
     }
 
-    /* 5. Force button text to be visible */
+    /* Interactive button styling */
     .nav-btn {
-        color: #ffffff !important;
-        border: 1px solid rgba(147, 51, 234, 0.25) !important;
         background-color: rgba(255, 255, 255, 0.05) !important;
-        padding: 6px 16px !important;
+        border: 1px solid rgba(147, 51, 234, 0.3) !important;
+        color: #ffffff !important;
         border-radius: 20px !important;
+        padding: 6px 16px !important;
         text-decoration: none !important;
+        margin-left: 10px;
     }
     
-    /* 6. Ensure header spacing works correctly */
-    .header-space-offset {
-        margin-top: 80px;
-    }
+    .header-space-offset { margin-top: 80px; }
     </style>
+""", unsafe_allow_html=True)
+
+# --- HEADER LAYOUT ---
+st.markdown(f"""
+    <div class="custom-top-header">
+        <div style="font-weight:bold; color:white;">modula.</div>
+        <div>
+            <a href="?page=Stock+Catalog" class="nav-btn">Stock Catalog</a>
+            <a href="?page=Our+Responsibility" class="nav-btn">Our Responsibility</a>
+            <a href="?page=Community+Survey" class="nav-btn">Community Survey</a>
+        </div>
+    </div>
+    <div class="header-space-offset"></div>
 """, unsafe_allow_html=True)
 
 # --- PAGE CONTENT ---
@@ -118,5 +141,5 @@ elif current_page == "Our Responsibility":
 
 elif current_page == "Community Survey":
     st.markdown("## 📋 Community Survey")
-    q1 = st.slider("Store layout rating", 1, 5, 3)
+    st.slider("Store layout rating", 1, 5, 3)
     st.button("Submit Survey Response")
