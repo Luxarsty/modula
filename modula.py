@@ -24,7 +24,7 @@ def get_image_base64(path):
 
 # Convert images to active inline base64 strings
 logo_base64 = get_image_base64("modula.png")
-icon_base64 = get_image_base64("logo.jpg")
+icon_base64 = get_image_base64("modulalogo.png") # Updated to correct filename and extension
 
 # Custom CSS for Galaxy Theme, Input Elements, and Fixed Header Elements
 st.markdown("""
@@ -134,7 +134,7 @@ logo_html = f'<img src="data:image/png;base64,{logo_base64}" alt="modula. logo">
 st.markdown(f"""
     <div class="custom-top-header">
         <div class="brand-logo-container" style="display: flex; align-items: center; gap: 10px;">
-            <img src="data:image/jpeg;base64,{icon_base64}" alt="modula icon" style="height: 45px; width: auto; border-radius: 50%;">
+            <img src="data:image/png;base64,{icon_base64}" alt="modula icon" style="height: 45px; width: auto; border-radius: 50%;">
             {logo_html}
         </div>
         <div class="custom-top-nav">
