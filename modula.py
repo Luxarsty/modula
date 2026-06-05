@@ -22,8 +22,9 @@ def get_image_base64(path):
             return base64.b64encode(image_file.read()).decode()
     return ""
 
-# Convert modula.png to an active inline base64 string
+# Convert images to active inline base64 strings
 logo_base64 = get_image_base64("modula.png")
+icon_base64 = get_image_base64("logo.jpg") # Loading logo.jpg[cite: 2]
 
 # Custom CSS for Galaxy Theme, Input Elements, and Fixed Header Elements
 st.markdown("""
@@ -39,7 +40,7 @@ st.markdown("""
         color: #ffffff !important;
     }
 
-    /* Completely neutralize the default Streamlit glass block header so mouse clicks pass through */
+    /* Completely neutralize the default Streamlit glass block header */
     header[data-testid="stHeader"] {
         background-color: transparent !important;
         z-index: 1 !important;
@@ -58,7 +59,6 @@ st.markdown("""
         backdrop-filter: blur(16px);
         -webkit-backdrop-filter: blur(16px);
         border-bottom: 1px solid rgba(147, 51, 234, 0.2);
-        /* Raised z-index ensures elements are entirely physical and clickable */
         z-index: 999999 !important;
         display: flex;
         justify-content: space-between;
@@ -74,11 +74,10 @@ st.markdown("""
         display: block;
     }
 
-    /* Menu container shifted smoothly left of the Deploy cluster */
+    /* Menu container */
     .custom-top-nav {
         display: flex;
         gap: 12px;
-        margin-right: 140px;
         pointer-events: auto !important;
     }
 
@@ -99,7 +98,6 @@ st.markdown("""
         display: inline-block;
     }
 
-    /* 🚀 HOVER EFFECT: Physically pops out toward user with an intense cosmic neon shadow */
     .nav-btn:hover {
         color: #ffffff !important;
         background-color: rgba(147, 51, 234, 0.12) !important;
@@ -108,7 +106,6 @@ st.markdown("""
         box-shadow: 0 6px 16px rgba(147, 51, 234, 0.4) !important;
     }
 
-    /* ✨ ACTIVE STATE: Mimics a mechanical switch being pressed down and staying lit */
     .nav-btn.active {
         color: #ffffff !important;
         background: linear-gradient(135deg, rgba(168, 85, 247, 0.35), rgba(236, 72, 153, 0.35)) !important;
@@ -117,49 +114,23 @@ st.markdown("""
         transform: translateY(0px) scale(0.97);
     }
 
-    /* Padding offset helper to prevent main layout from hiding behind fixed header bar */
     .header-space-offset {
         margin-top: 60px;
     }
-
-    /* Standard Streamlit Action Buttons Pop Custom Settings */
+    
     div.stButton > button {
         background-color: rgba(255, 255, 255, 0.05) !important;
         border: 1px solid #a855f7 !important;
         color: #ffffff !important;
         border-radius: 8px !important;
-        transition: all 0.2s ease !important;
-    }
-    div.stButton > button:hover {
-        transform: translateY(-2px) !important;
-        box-shadow: 0 4px 12px rgba(147, 51, 234, 0.4) !important;
-    }
-    
-    /* Smooth fading transition whenever pages change */
-    .element-container, .stMarkdown, div[data-testid="stVerticalBlock"] {
-        animation: fadeIn 0.4s ease-in-out;
-    }
-    
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(4px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
-    /* Subtle glow effect around metrics */
-    div[data-testid="stMetricValue"], .stAlert {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(147, 51, 234, 0.3);
-        border-radius: 8px;
-        padding: 10px !important;
-        box-shadow: 0 0 10px rgba(147, 51, 234, 0.1);
     }
     </style>
 """, unsafe_allow_html=True)
 
-# Generate fallback text layout if modula.png is missing locally
+# Generate logo layout
 logo_html = f'<img src="data:image/png;base64,{logo_base64}" alt="modula. logo">' if logo_base64 else '<div style="font-size:1.8rem; font-weight:800; background:linear-gradient(45deg, #a855f7, #ec4899); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">modula.</div>'
 
-# --- INTEGRATED HEADER INJECTION: GALAXY IMAGE (LEFT) & NAV BUTTONS (RIGHT) ---
+# --- INTEGRATED HEADER: LOGO (LEFT) & NAV (CENTER) & ICON (RIGHT) ---
 st.markdown(f"""
     <div class="custom-top-header">
         <div class="brand-logo-container">
@@ -169,6 +140,9 @@ st.markdown(f"""
             <a href="?page=Stock+Catalog" target="_self" class="nav-btn {'active' if current_page == 'Stock Catalog' else ''}">Stock Catalog</a>
             <a href="?page=Our+Responsibility" target="_self" class="nav-btn {'active' if current_page == 'Our Responsibility' else ''}">Our Responsibility</a>
             <a href="?page=Community+Survey" target="_self" class="nav-btn {'active' if current_page == 'Community Survey' else ''}">Community Survey</a>
+        </div>
+        <div class="brand-logo-container">
+            <img src="data:image/jpeg;base64,{icon_base64}" alt="modula icon" style="height: 45px; width: auto; border-radius: 50%;">
         </div>
     </div>
     <div class="header-space-offset"></div>
@@ -182,10 +156,8 @@ st.markdown(f"""
 if current_page == "Stock Catalog":
     st.markdown("## 🚀 Stock Catalog")
     st.markdown("#### Hand-built for performance. Zero compromises, fair pricing.")
-    st.caption("*Plan: Prices curated for organic growth, subject to adjustments as our community expands.*")
     st.divider()
 
-    # Cosmic PC Series
     st.markdown("### cosmic. Series")
     st.markdown("**Full PC Component Set Bundle:** `$1400` *(Includes 64GB RAM + items below)*")
     
@@ -199,10 +171,7 @@ if current_page == "Stock Catalog":
 
     st.divider()
 
-    # Util Peripherals Series
     st.markdown("### 🖱️ util. Series (ODelay set)")
-    st.caption("* Bundles strictly priced as written below *")
-
     col3, col4, col5 = st.columns(3)
     with col3:
         st.info("**ODelay Keyboard**\n\n(100% Layout)\n\n**$80**")
@@ -214,62 +183,56 @@ if current_page == "Stock Catalog":
 
 elif current_page == "Our Responsibility":
     st.markdown("## 🌱 Responsibility Studio Poster")
-    st.markdown("#### How modula. impacts our community and planet responsibly.")
     st.divider()
 
-    # Row 1: E-Waste & Sourced Materials
     left_col, right_col = st.columns(2)
     with left_col:
         st.markdown("### ♻️ E-Waste Recycling Program")
-        st.write("We host a dedicated in-store drop-off station where customers can safely recycle broken or outdated tech, keyboards, and mice.")
+        st.write("We host a dedicated in-store drop-off station for customers.")
     with right_col:
         st.markdown("### 🔌 Ethical Material Sourcing")
-        st.write("We prioritize purchasing our raw materials—such as high-quality resin and copper wiring—from suppliers who explicitly guarantee ethical labor practices and fair wages.")
+        st.write("We prioritize suppliers guaranteeing ethical labor practices.")
 
     st.divider()
 
-    # Row 2: Packaging & Artisans
     left_col2, right_col2 = st.columns(2)
     with left_col2:
         st.markdown("### 📦 Sustainable Packaging")
-        st.write("All products are shipped and sold in 100% recyclable, plastic-free cardboard boxes to minimize our environmental impact.")
+        st.write("100% recyclable, plastic-free shipping.")
     with right_col2:
         st.markdown("### 🎨 Local Artisan Support")
-        st.write("We dedicate shelf space to showcase and sell custom artisan keycaps created by independent local artists without charging them any consignment fees.")
+        st.write("Shelf space for independent local artists at zero consignment cost.")
 
     st.divider()
-
-    # Row 3: STEM Focus
     st.markdown("### 🧠 Community STEM Funding")
-    st.write("We donate 5% of our monthly profits to a local youth program to help fund after-school coding and hardware assembly workshops.")
+    st.write("Donating 5% of monthly profits to local youth coding workshops.")
 
 
 elif current_page == "Community Survey":
     st.markdown("## 📋 Customer Satisfaction Survey")
-    st.markdown("#### Help us improve our operations. Your thoughts build our reputation.")
     st.divider()
 
-    st.markdown("### ⭐ Rating Section (1-5)")
-    q1 = st.slider("1. How do you like the store layout?", 1, 5, 3)
-    q2 = st.slider("2. How would you rate the latency and responsiveness of your ODelay gaming mouse/keyboard?", 1, 5, 3)
-    q3 = st.slider("3. How easy and straightforward was it to navigate our boutique online shop menu?", 1, 5, 3)
+    st.markdown("### ⭐ Rating Section")
+    q1 = st.slider("1. Store layout rating", 1, 5, 3)
+    q2 = st.slider("2. ODelay mouse/keyboard latency rating", 1, 5, 3)
+    q3 = st.slider("3. Website navigation ease", 1, 5, 3)
 
     st.divider()
 
-    st.markdown("### ❓ Verification (Yes / No)")
-    q4 = st.radio("4. Did your components arrive perfectly intact with zero damage to the custom braided cabling or casing?", ["Yes", "No"])
-    q5 = st.radio("5. Would you recommend 'modula.' to other gamers, creators, or streamers?", ["Yes", "No"])
-    q6 = st.radio("6. Did our pricing make high-end custom hardware accessible for your current budget?", ["Yes", "No"])
+    st.markdown("### ❓ Verification")
+    q4 = st.radio("4. Perfect condition arrival?", ["Yes", "No"])
+    q5 = st.radio("5. Recommend modula. to others?", ["Yes", "No"])
+    q6 = st.radio("6. Pricing accessibility?", ["Yes", "No"])
 
     st.divider()
 
     st.markdown("### ✍️ Short Answer Feedback")
-    q7 = st.text_input("7. How did you first discover the modula. studio?")
-    q8 = st.text_input("8. Which custom-built item is currently the main centerpiece of your desk setup?")
-    q9 = st.text_input("9. How frequently do you typically look to upgrade or customize elements of your hardware?")
-    q10 = st.text_area("10. What should we add next as a bundle? (ideas)")
+    q7 = st.text_input("7. How did you discover us?")
+    q8 = st.text_input("8. Main centerpiece of your setup?")
+    q9 = st.text_input("9. Upgrade frequency?")
+    q10 = st.text_area("10. Bundle ideas?")
 
     st.divider()
     
     if st.button("Submit Survey Response"):
-        st.success("Thank you for your feedback! Use your coupon code INFINITY15 on checkout for $15 off!")
+        st.success("Thank you for your feedback! Use code INFINITY15 for $15 off!")
