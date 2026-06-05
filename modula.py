@@ -24,20 +24,45 @@ def get_image_base64(path):
 
 # Convert images to active inline base64 strings
 logo_base64 = get_image_base64("modula.png")
-icon_base64 = get_image_base64("modulalogo.png") # Updated to correct filename and extension
+icon_base64 = get_image_base64("modulalogo.png")
 
 # Custom CSS for Galaxy Theme, Input Elements, and Fixed Header Elements
 st.markdown("""
     <style>
-    /* Galaxy Background & Text Coloring */
+    /* Force the main app container to sit above the background */
     .stApp {
-        background-image: radial-gradient(circle at center, #111222 0%, #080810 70%, #020205 100%);
+        background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 50%, #020617 100%);
         color: #ffffff;
+        position: relative;
+        z-index: 1;
     }
     
-    /* Make all default text, headers, and labels bright white for visibility */
+    /* Move background to the back with a negative z-index */
+    .stApp::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+                          radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px);
+        background-size: 550px 550px, 350px 350px;
+        animation: twinkle 15s linear infinite;
+        opacity: 0.3;
+    }
+    
+    @keyframes twinkle {
+        from { background-position: 0 0, 0 0; }
+        to { background-position: 550px 550px, 350px 350px; }
+    }
+    
+    /* Ensure other elements stay visible and above the background */
     h1, h2, h3, h4, h5, h6, p, label, .stMarkdown {
         color: #ffffff !important;
+        position: relative;
+        z-index: 2;
     }
 
     /* Completely neutralize the default Streamlit glass block header */
