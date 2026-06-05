@@ -24,7 +24,7 @@ def get_image_base64(path):
 
 # Convert images to active inline base64 strings
 logo_base64 = get_image_base64("modula.png")
-icon_base64 = get_image_base64("logo.jpg") # Loading logo.jpg[cite: 2]
+icon_base64 = get_image_base64("logo.jpg")
 
 # Custom CSS for Galaxy Theme, Input Elements, and Fixed Header Elements
 st.markdown("""
@@ -130,19 +130,17 @@ st.markdown("""
 # Generate logo layout
 logo_html = f'<img src="data:image/png;base64,{logo_base64}" alt="modula. logo">' if logo_base64 else '<div style="font-size:1.8rem; font-weight:800; background:linear-gradient(45deg, #a855f7, #ec4899); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">modula.</div>'
 
-# --- INTEGRATED HEADER: LOGO (LEFT) & NAV (CENTER) & ICON (RIGHT) ---
+# --- INTEGRATED HEADER: ICON & LOGO (LEFT) & NAV (CENTER/RIGHT) ---
 st.markdown(f"""
     <div class="custom-top-header">
-        <div class="brand-logo-container">
+        <div class="brand-logo-container" style="display: flex; align-items: center; gap: 10px;">
+            <img src="data:image/jpeg;base64,{icon_base64}" alt="modula icon" style="height: 45px; width: auto; border-radius: 50%;">
             {logo_html}
         </div>
         <div class="custom-top-nav">
             <a href="?page=Stock+Catalog" target="_self" class="nav-btn {'active' if current_page == 'Stock Catalog' else ''}">Stock Catalog</a>
             <a href="?page=Our+Responsibility" target="_self" class="nav-btn {'active' if current_page == 'Our Responsibility' else ''}">Our Responsibility</a>
             <a href="?page=Community+Survey" target="_self" class="nav-btn {'active' if current_page == 'Community Survey' else ''}">Community Survey</a>
-        </div>
-        <div class="brand-logo-container">
-            <img src="data:image/jpeg;base64,{icon_base64}" alt="modula icon" style="height: 45px; width: auto; border-radius: 50%;">
         </div>
     </div>
     <div class="header-space-offset"></div>
