@@ -233,4 +233,4 @@ elif current_page == "Community Survey":
     st.divider()
     
     if st.button("Submit Survey Response"):
-        st.success("Thank you for your feedback! Use code INFINITY15 for $15 off!")
+        st.success("Thank you for your feedback!")
