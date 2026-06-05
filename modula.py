@@ -26,55 +26,36 @@ def get_image_base64(path):
 logo_base64 = get_image_base64("modula.png")
 icon_base64 = get_image_base64("modulalogo.png")
 
-# --- CSS BLOCK ---
 st.markdown("""
     <style>
-    /* 1. Reset and Background Setup */
-    [data-testid="stAppViewContainer"] {
-        background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 50%, #020617 100%) !important;
+    /* 1. Ensure the app container is transparent to show the body background */
+    .stApp {
+        background: transparent !important;
     }
     
-    /* Galaxy Star Background Effect */
-    [data-testid="stAppViewContainer"]::before {
+    /* 2. Base galaxy background on the body */
+    body {
+        background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 50%, #020617 100%) !important;
+        position: relative;
+    }
+    
+    /* 3. The moving star layer - specifically restricted to z-index -1 */
+    body::before {
         content: "";
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 100%;
-        z-index: 0;
+        z-index: -1;
         background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
                           radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px);
         background-size: 550px 550px, 350px 350px;
         animation: twinkle 15s linear infinite;
         opacity: 0.3;
-        pointer-events: none;
-    }
-    
-    @keyframes twinkle {
-        from { background-position: 0 0, 0 0; }
-        to { background-position: 550px 550px, 350px 350px; }
     }
 
-    /* 2. Content Styling */
-    .stApp {
-        background: transparent !important;
-    }
-    
-    h1, h2, h3, h4, h5, h6, p, label, .stMarkdown, .stMetric {
-        color: #ffffff !important;
-    }
-
-    /* 3. Product Card Rectangles (util. Series) */
-    div[data-testid="stInfo"] {
-        background-color: rgba(30, 41, 59, 0.6) !important;
-        border: 1px solid rgba(168, 85, 247, 0.3) !important;
-        border-radius: 15px !important;
-        padding: 20px !important;
-        color: #ffffff !important;
-    }
-
-    /* 4. Navigation Header */
+    /* 4. Ensure navigation UI is always on top */
     .custom-top-header {
         position: fixed;
         top: 0;
@@ -82,42 +63,31 @@ st.markdown("""
         right: 0;
         height: 70px;
         padding: 5px max(6vw, 30px);
-        background: rgba(8, 8, 16, 0.85);
+        background: rgba(8, 8, 16, 0.85) !important;
         backdrop-filter: blur(16px);
         border-bottom: 1px solid rgba(147, 51, 234, 0.2);
-        z-index: 999;
+        z-index: 999999 !important; /* Forces the header above the galaxy */
         display: flex;
         justify-content: space-between;
         align-items: center;
+        pointer-events: auto !important;
     }
-    
+
+    /* 5. Force button text to be visible */
     .nav-btn {
-        background-color: rgba(255, 255, 255, 0.03) !important;
-        border: 1px solid rgba(147, 51, 234, 0.25) !important;
         color: #ffffff !important;
-        border-radius: 20px !important;
+        border: 1px solid rgba(147, 51, 234, 0.25) !important;
+        background-color: rgba(255, 255, 255, 0.05) !important;
         padding: 6px 16px !important;
+        border-radius: 20px !important;
         text-decoration: none !important;
-        margin-left: 10px;
     }
     
-    .header-space-offset { margin-top: 80px; }
+    /* 6. Ensure header spacing works correctly */
+    .header-space-offset {
+        margin-top: 80px;
+    }
     </style>
-""", unsafe_allow_html=True)
-
-# --- HEADER LAYOUT ---
-logo_html = f'<img src="data:image/png;base64,{logo_base64}" style="height:40px;">' if logo_base64 else '<b>modula.</b>'
-
-st.markdown(f"""
-    <div class="custom-top-header">
-        <div>{logo_html}</div>
-        <div>
-            <a href="?page=Stock+Catalog" class="nav-btn">Stock Catalog</a>
-            <a href="?page=Our+Responsibility" class="nav-btn">Our Responsibility</a>
-            <a href="?page=Community+Survey" class="nav-btn">Community Survey</a>
-        </div>
-    </div>
-    <div class="header-space-offset"></div>
 """, unsafe_allow_html=True)
 
 # --- PAGE CONTENT ---
