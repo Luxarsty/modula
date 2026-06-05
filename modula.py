@@ -26,48 +26,20 @@ def get_image_base64(path):
 logo_base64 = get_image_base64("modula.png")
 icon_base64 = get_image_base64("modulalogo.png")
 
-# CSS with fixed dark background and star overlay
+# CSS for a clean, consistent dark theme and restored header
 st.markdown("""
     <style>
-    /* Set a flat dark background to prevent "white flash" */
+    /* 1. Set a clean, consistent dark background */
     .stApp, body {
         background-color: #020617 !important;
     }
     
-    /* Keep the stars on top of the background */
-    body::before {
-        content: "";
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 0;
-        background-image: radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
-                          radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px);
-        background-size: 550px 550px, 350px 350px;
-        animation: twinkle 15s linear infinite;
-        opacity: 0.3;
-        pointer-events: none;
-    }
-    
-    @keyframes twinkle {
-        from { background-position: 0 0, 0 0; }
-        to { background-position: 550px 550px, 350px 350px; }
-    }
-    
-    /* Ensure all text remains visible */
+    /* 2. Global text styling */
     h1, h2, h3, h4, h5, h6, p, label, .stMarkdown, .stMetric, .stRadio, .stSlider {
         color: #ffffff !important;
     }
 
-    /* Neutralize default Streamlit header */
-    header[data-testid="stHeader"] {
-        background-color: transparent !important;
-        z-index: 1 !important;
-    }
-
-    /* --- GLOBAL TOP FLOATING HEADER --- */
+    /* 3. Header Styling */
     .custom-top-header {
         position: fixed;
         top: 0;
@@ -82,10 +54,8 @@ st.markdown("""
         display: flex;
         justify-content: space-between;
         align-items: center;
-        pointer-events: auto !important;
     }
 
-    /* Interactive button styling */
     .nav-btn {
         background-color: rgba(255, 255, 255, 0.05) !important;
         border: 1px solid rgba(147, 51, 234, 0.3) !important;
@@ -97,13 +67,24 @@ st.markdown("""
     }
     
     .header-space-offset { margin-top: 80px; }
+    
+    /* 4. Product Card Rectangles */
+    div[data-testid="stInfo"] {
+        background-color: rgba(30, 41, 59, 0.6) !important;
+        border: 1px solid rgba(168, 85, 247, 0.3) !important;
+        border-radius: 15px !important;
+        padding: 20px !important;
+    }
     </style>
 """, unsafe_allow_html=True)
 
 # --- HEADER LAYOUT ---
+# Displaying the logo in the header
+logo_html = f'<img src="data:image/png;base64,{logo_base64}" style="height:40px;">' if logo_base64 else '<span style="font-size:20px; font-weight:bold;">modula.</span>'
+
 st.markdown(f"""
     <div class="custom-top-header">
-        <div style="font-weight:bold; color:white;">modula.</div>
+        <div style="display:flex; align-items:center; gap:10px;">{logo_html}</div>
         <div>
             <a href="?page=Stock+Catalog" class="nav-btn">Stock Catalog</a>
             <a href="?page=Our+Responsibility" class="nav-btn">Our Responsibility</a>
